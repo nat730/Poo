@@ -1,28 +1,16 @@
-# Projet initial pour vos exercices d'algorithmie en typescript
+# Projet de Combats de Vikings en TypeScript
+
+## Description
+
+Ce projet est un jeu de combat de vikings en TypeScript. Il a été réalisé dans le cadre de la formation de dévapp de Simplon.
 
 ## Installation
 
-1. Clonez le projet
-```bash
-cd ~/dev
-mkdir poo
-cd poo
-git clone git@github.com:ThomasLaforge/poo-setup-simplon.git poo-template
-```
-2. Déplacez vous dans le dossier cloné
-```bash
-cd poo-template
-```
-3. Supprimez le dossier `.git`
-```bash
-rm -rf .git
-```
-3. installez les dépendances
-```bash
-npm install
-``` 
-4. Lancez le projet
-```bash
-npm run dev
-```
-5. Modifiez le fichier `src/index.ts` pour commencer à coder
+Pour installer le projet, il faut cloner le repository en utilisant la commande `git clone git@github.com:nat730/Poo.git` et installer les dépendances avec la commande `npm install`.
+
+## Utilisation
+
+Pour lancer le projet, il faut utiliser la commande `npm start`.
+
+## Auteurs
+Natanael
