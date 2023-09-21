@@ -8,9 +8,6 @@ export class Battle {
     private viking2: Viking;
 
     constructor(viking1: Viking, viking2: Viking) {
-        if (viking1.nom === viking2.nom) {
-            throw new Error("Les Vikings doivent avoir des noms différents.");
-        }
         this.viking1 = viking1;
         this.viking2 = viking2;
     }
@@ -63,10 +60,6 @@ export class Battle {
             defenseur = this.viking1;
         }
 
-        if (!attaquant || !defenseur) {
-            throw new Error("Les Vikings ne sont pas correctement initialisés.");
-        }
-
         while (attaquant.sante > 0 && defenseur.sante > 0) {
             const isCritical = Math.random() < CRITICAL_HIT_RATE;
             const degatsInfliges = this.calculateDamage(attaquant, defenseur, isCritical);
@@ -74,7 +67,7 @@ export class Battle {
             this.handleCriticalFailure(attaquant, degatsInfliges);
             this.applyDamage(attaquant, defenseur, degatsInfliges);
 
-            [attaquant, defenseur] = [defenseur, attaquant];
+                [attaquant, defenseur] = [defenseur, attaquant];
         }
 
         if (this.viking1.sante <= 0) {
