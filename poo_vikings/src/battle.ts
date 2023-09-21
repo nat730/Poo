@@ -28,12 +28,12 @@ export class Battle {
     }
 
     private applyDamage(attacker: Viking, defender: Viking, damage: number): void {
-        if (damage > 0 && defender.defenseBinaire < damage) {
+        if (damage > 0) {
             console.log(`${attacker.nom} attaque ${defender.nom} et inflige ${damage} points de dégâts.`);
             defender.sante -= damage;
 
-            if (attacker.arme.volDeVie) {
-                const pointsDeVieVoles = damage * 0.13;
+            if (attacker.type === "Viking") {
+                const pointsDeVieVoles = damage * 0.15;
                 if (defender.sante < defender.santeMax) {
                     attacker.sante += pointsDeVieVoles;
                     console.log(`${attacker.nom} vole ${pointsDeVieVoles} points de vie.`);
