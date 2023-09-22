@@ -1,12 +1,13 @@
 import { Arme } from "./arme";
 import { Armor } from "./armure";
+import {CharacterType} from "./CharacterType";  
 
 export class Character {
     private _nom: string;
-    private _type: string;
+    private _job: CharacterType;
     private _niveau: number;
     private _experience: number;
-    private _sante: number;
+    private _sante: number = 40;
     private _santeMax: number;
     private _force: number;
     private _vitesse: number;
@@ -19,63 +20,26 @@ export class Character {
 
     constructor(
         nom: string,
-        type: string,
+        job: CharacterType,
         arme: Arme,
         armure: Armor
     ) {
         this._nom = nom;
-        this._type = type;
+        this._job = job;
         this._niveau = 1;
         this._experience = 0;
-        this._sante = 50;
-        this._santeMax = 50;
-        this._force = 10;
-        this._vitesse = 10;
-        this._intelligence = 10;
-        this._mana = 50;
-        this._chanceCoupCritique = 2;
-        this._defense = 0;
+        this._santeMax = 50 + this.job.santeMaxBonus;
+        this._sante = this._santeMax
+        this._force = 10 + this.job.forceBonus;
+        this._vitesse = 10 +this.job.vitesseBonus;
+        this._intelligence = 10 + this.job.intelligenceBonus;
+        this._mana = 50 + this.job.manaBonus;
+        this._chanceCoupCritique = 2 + this.job.chanceCoupCritiqueBonus;
+        this._defense = 0
         this._arme = arme;
         this._armure = armure;
     }
 
-    Statistiques() {
-    if (this._type==="viking") {
-        this._sante+=25
-        this._force+=4
-        this._vitesse+=2
-        this._intelligence+=0
-        this._mana+=0
-        this._chanceCoupCritique+=8
-    }
-
-    if (this._type==="archer") {
-        this._sante+=15
-        this._force+=2
-        this._vitesse+=3
-        this._intelligence+=1
-        this._mana+=10
-        this._chanceCoupCritique+=5
-    }
-
-    if (this._type==="chevalier") {
-        this._sante+=40
-        this._force+=5
-        this._vitesse+=1
-        this._intelligence+=1
-        this._mana+=5
-        this._chanceCoupCritique+=3
-    }
-
-    if (this._type==="magicien") {
-        this._sante+=5
-        this._force+=1
-        this._vitesse+=1
-        this._intelligence+=5
-        this._mana+=45
-    }
-    }   
-    
     get nom() {
         return this._nom;
     }
@@ -84,14 +48,9 @@ export class Character {
         this._nom = nom;
     }
     
-    get type() {
-        return this._type;
-    }
-
-    set type(type : string) {
-        this._type = type;
-    }
-
+    get job() {
+        return this._job;
+    } 
     get niveau() {
         return this._niveau;
     }
@@ -172,11 +131,12 @@ export class Character {
         this._arme = arme;
     }
 
-    get santeMax() {
-        return this._santeMax;
+    get armure() {
+        return this._armure;
     }
 
-    set santeMax(santeMax : number) {
-        this._santeMax = santeMax;
+    set armure(armure : Armor) {
+        this._armure = armure;
     }
 }
+   

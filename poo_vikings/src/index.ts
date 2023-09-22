@@ -1,7 +1,7 @@
 import { Character } from './Personnage';
 import { Armurerie } from './armurerie';
-import { Battle } from './battle';
 import * as readline from 'readline';
+import { getJobFromString } from './characterutils'; // Importez la fonction depuis le fichier approprié
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -10,17 +10,19 @@ const rl = readline.createInterface({
 
 function genererCarac() {
     rl.question("Quel type de personnage voulez-vous créer ? (viking, archer, chevalier, magicien) : ", (type: string) => {
-        while (type !== "viking" && type !== "archer" && type !== "chevalier" && type !== "magicien") {
-            console.log("Type de personnage invalide. Veuillez choisir parmi viking, archer, chevalier, magicien.");
-            rl.question("Quel type de personnage voulez-vous créer ? (viking, archer, chevalier, magicien) : ", (newType: string) => {
-                type = newType;
-            });
+        const job = getJobFromString(type); // Utilisez la fonction pour obtenir une instance de personnage
+        if (job) {
+            const Héros = new Character("Héros", job, Armurerie.choisirArmeAleatoire(), Armurerie.choisirArmureAleatoire());
+            const arme = Armurerie.choisirArmeAleatoire();
+            const armure = Armurerie.choisirArmureAleatoire();
+            Héros.arme = arme;
+            Héros.armure = armure;
+            console.log(Héros);
+            rl.close();
+        } else {
+            console.log("Veuillez choisir un type de personnage valide.");
+            genererCarac();
         }
-        const arme = Armurerie.choisirArmeAleatoire();
-        const armure = Armurerie.choisirArmureAleatoire();
-        const Héros = new Character("Héros",type, arme, armure);
-        console.log(Héros);
-        rl.close();
     });
 }
 

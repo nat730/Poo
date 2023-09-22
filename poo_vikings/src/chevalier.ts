@@ -1,26 +1,20 @@
-import { Arme } from "./arme";
-import { Armor } from "./armure";
-import { Character } from "./Personnage";
+import { CharacterType } from "./CharacterType";
 
-export class chevalier extends Character {
-    _bouclier: boolean;
+export class Chevalier extends CharacterType {
 
-    constructor(nom: string, sante: number, force: number, defense: number, defenseBinaire: number, arme: Arme, niveau: number, experience: number, type: string, vitesse: number, intelligence: number, mana: number, chanceCoupCritique: number, santeMax: number, equipement: string, armor: Armor, bouclier: boolean) {
-        super(nom,type, arme, armor);
-    this._bouclier = true;
-    sante+=40
-    force+=5
-    vitesse+=1
-    intelligence+=1
-    mana+=5
-    chanceCoupCritique+=3
+    private _bouclier: boolean;
+
+
+    constructor() {
+        super("Chevalier", 40, 5, 1, 1, 5, 3);
+        this._bouclier = true;
+
     }
 
-    get bouclier(): boolean {
+    public get bouclier(): boolean {
         return this._bouclier;
     }
-
-    set bouclier(value: boolean) {
+    public set bouclier(value: boolean) {
         this._bouclier = value;
     }
 }
