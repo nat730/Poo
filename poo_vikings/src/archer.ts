@@ -1,12 +1,12 @@
 import { Arme } from "./arme";
 import { Armor } from "./armure";
-import { Character } from "./Personnage";
+import { CharacterType } from "./CharacterType";
 
-export class Archer extends Character {
+export class Archer extends CharacterType {
     _piege: boolean;
 
     constructor(nom: string, sante: number, force: number, defense: number, defenseBinaire: number, arme: Arme, niveau: number, experience: number, type: string, vitesse: number, intelligence: number, mana: number, chanceCoupCritique: number, santeMax: number, equipement: string, armor: Armor, piege: boolean) {
-        super(nom,type, arme, armor);
+        super(type, santeMax, force, vitesse, intelligence, mana, chanceCoupCritique);
         this._piege = true;
         sante += 15
         force += 2

@@ -5,14 +5,14 @@
 
 import { Arme } from "./arme";
 import { Armor } from "./armure";
-import { Character } from "./Personnage";
+import { CharacterType } from "./CharacterType";
 
-export class Magicien extends Character {
+export class Magicien extends CharacterType {
     _regenMana: boolean;
     _spell: string;
 
     constructor(nom: string, sante: number, force: number, defense: number, defenseBinaire: number, arme: Arme, niveau: number, experience: number, type: string, vitesse: number, intelligence: number, mana: number, chanceCoupCritique: number, santeMax: number, equipement: string, armor: Armor, regenMana: boolean, spell: string) {
-        super(nom,type, arme, armor);
+        super(type, santeMax, force, vitesse, intelligence, mana, chanceCoupCritique);
         this._regenMana = true;
         this._spell = spell;
         sante += 5
