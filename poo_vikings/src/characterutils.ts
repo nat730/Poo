@@ -1,23 +1,37 @@
+export type JobAsString = 'Viking' | 'Archer' | 'Chevalier' | 'Magicien';
+import { Archer } from './archer';
+import { Chevalier } from './chevalier';
+import { Magicien } from './magicien';
+import { Viking } from './viking';
+
 import { CharacterType } from './CharacterType';
+import { Voleur } from './voleur';
 
 export function getJobFromString(job: string): CharacterType | null {
-    job = FormatJobInput(job);
-
-    try {
-        const classReference = eval(job);
-        if (typeof classReference === 'function') {
-            return new classReference();
-        } else {
-            console.error(`La classe "${job}" n'existe pas.`);
-            return null;
-        }
-    } catch (error) {
-        console.error(`Une erreur s'est produite lors de la création de l'instance : ${error}`);
+   if(!job) {
+       return null;
+   }
+   else if(job === 'Viking') {
+         return new Viking();
+    }
+    else if(job === 'Archer') {
+        return new Archer();
+    }
+    else if(job === 'Chevalier') {
+        return new Chevalier();
+    }
+    else if(job === 'Magicien') {
+        return new Magicien();
+    }
+    else if(job === 'Voleur'){
+        return new Voleur()
+    }
+    else {
         return null;
     }
 }
 
-function FormatJobInput(job: string): string {
+export function FormatJobInput(job: string): string {
     if (!job) {
         return job;
     }

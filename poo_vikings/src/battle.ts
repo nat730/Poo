@@ -1,82 +1,119 @@
-// import { Viking } from "./viking";
+import { Character } from "./Personnage";
 
+export class Battle {
+    private character1: Character;
+    private character2: Character;
 
-// const CRITICAL_HIT_RATE = 0.1;
-// const CRITICAL_FAILURE_RATE = 0.9;
+    constructor(character1: Character, character2: Character) {
+        this.character1 = character1;
+        this.character2 = character2;
+    }
 
-// export class Battle {
-//     private viking1: Viking;
-//     private viking2: Viking;
+    private calculateDamage(attacker: Character, defender: Character, isCritical: boolean): number {
+        const baseDamage = attacker.force + attacker.arme.degats - defender.defense;
+        if (attacker.job.type === "Voleur") {
+            return isCritical ? baseDamage * 2.5 : baseDamage;
+        } else {
+            return isCritical ? baseDamage * 2 : baseDamage;
+        }
+    }
+    
+    private trap(character: Character): void {
+        let trapDamage = ((character.force + character.arme.degats) * 2.5) - this.character2.defense;
+        if (character.job.type === "Chevalier") {
+            trapDamage = trapDamage * 0.75;
+        }
+        console.log(`${character.nom} pose un piège et inflige ${trapDamage} points de dégâts.`);
+        character.sante -= trapDamage;
+    }
 
-//     constructor(viking1: Viking, viking2: Viking) {
-//         this.viking1 = viking1;
-//         this.viking2 = viking2;
-//     }
+    private regenMana(character: Character): void {
+        if (character.job.type === "Magicien" && character.mana < character.manaMax) {
+            const manaRegen = character.intelligence * 0.5;
+            character.mana += manaRegen;
+            if (character.mana > character.manaMax) {
+                character.mana = character.manaMax;
+            }
+            console.log(`${character.nom} régénère ${manaRegen} points de mana.`);
+        }
+    }
 
-//     private calculateDamage(attacker: Viking, defender: Viking, isCritical: boolean): number {
-//         const baseDamage = attacker.force + attacker.arme.degats - defender.defense;
-//         return isCritical ? baseDamage * 2 : baseDamage;
-//     }
+    private applyDamage(attacker: Character, defender: Character, damage: number, isCritical: boolean): void {
+        if (damage > 0) {
+            if (isCritical) {
+                console.log(`${attacker.nom} fait un coup critique !`);
+            }
+            console.log(`${attacker.nom} attaque ${defender.nom} et inflige ${damage} points de dégâts.`);
+            
+            if (attacker.job.type === "Chevalier") {
+                damage = damage * 0.75;
+            }
+    
+            defender.sante -= damage;
+            if (defender.sante < 0) {
+                defender.sante = 0;
+            }
+            console.log(`${defender.nom} a maintenant ${defender.sante} points de vie.`);
+    
+            if (attacker.job.type === "Viking") {
+                const pointsDeVieVoles = damage * 0.15;
+                if (attacker.sante < attacker.santemax) {
+                    attacker.sante += pointsDeVieVoles;
+                    console.log(`${attacker.nom} vole ${pointsDeVieVoles} points de vie.`);
+                    console.log(`${attacker.nom} a maintenant ${attacker.sante} points de vie.`);
+                }
+            }
+        } else {
+            console.log(`${attacker.nom} attaque ${defender.nom}, mais ${defender.nom} bloque l'attaque.`);
+            if (defender.sante > 0) {
+                console.log(`${defender.nom} a toujours ${defender.sante} points de vie.`);
+            }
+        }
+    }
 
-//     private handleCriticalFailure(attacker: Viking, damage: number): void {
-//         if (Math.random() > CRITICAL_FAILURE_RATE) {
-//             console.log(`${attacker.nom} subit un échec critique et rate son attaque !`);
-//             attacker.sante -= damage;
-//             if (attacker.sante > 0) {
-//                 console.log(`${attacker.nom} se blesse et perd ${damage} points de vie.`);
-//             }
-//         }
-//     }
+    private activateTrap(character: Character): void {
+        if (
+            (character.job.type === "Archer") && character.vitesse > this.character2.vitesse
+        ) {
+            this.trap(character);
+        }
+    }
 
-//     private applyDamage(attacker: Viking, defender: Viking, damage: number): void {
-//         if (damage > 0) {
-//             console.log(`${attacker.nom} attaque ${defender.nom} et inflige ${damage} points de dégâts.`);
-//             defender.sante -= damage;
+    public simulateBattle(): string {
+        let attacker: Character;
+        let defender: Character;
 
-//             if (attacker.type === "Viking") {
-//                 const pointsDeVieVoles = damage * 0.15;
-//                 if (defender.sante < defender.santeMax) {
-//                     attacker.sante += pointsDeVieVoles;
-//                     console.log(`${attacker.nom} vole ${pointsDeVieVoles} points de vie.`);
-//                 }
-//             }
-//         } else {
-//             console.log(`${attacker.nom} attaque ${defender.nom}, mais ${defender.nom} bloque l'attaque en sacrifiant sa défense.`);
-//             if (defender.sante > 0) {
-//                 console.log(`${defender.nom} a toujours ${defender.sante} points de vie.`);
-//             }
-//             defender.defense -= 1;
-//         }
-//     }
+        if (this.character1.vitesse < this.character2.vitesse) {
+            attacker = this.character1;
+            defender = this.character2;
+        } else {
+            attacker = this.character2;
+            defender = this.character1;
+        }
 
-//     public simulateBattle(): string {
-//         let attaquant: Viking | undefined;
-//         let defenseur: Viking | undefined;
+        this.activateTrap(attacker);
+        this.regenMana(attacker);
 
-//         if (this.viking1.force < this.viking2.force) {
-//             attaquant = this.viking1;
-//             defenseur = this.viking2;
-//         } else {
-//             attaquant = this.viking2;
-//             defenseur = this.viking1;
-//         }
+        while (attacker.sante > 0 && defender.sante > 0) {
+            const isCritical = Math.random() < attacker.chanceCoupCritique;
+            const degatsInfliges = this.calculateDamage(attacker, defender, isCritical);
 
-//         while (attaquant.sante > 0 && defenseur.sante > 0) {
-//             const isCritical = Math.random() < CRITICAL_HIT_RATE;
-//             const degatsInfliges = this.calculateDamage(attaquant, defenseur, isCritical);
+            this.applyDamage(attacker, defender, degatsInfliges, isCritical);
+            if (attacker.job.type === "Voleur" && isCritical) {
+                this.regenMana(attacker);
+                [attacker, defender] = [attacker, defender];
+            }
+            else {
+                [attacker, defender] = [defender, attacker];
+            }
+        }
 
-//             this.handleCriticalFailure(attaquant, degatsInfliges);
-//             this.applyDamage(attaquant, defenseur, degatsInfliges);
-
-//             [attaquant, defenseur] = [defenseur, attaquant];
-//         }
-
-//         if (this.viking1.sante <= 0) {
-//             console.log(`${this.viking1.nom} est vaincu.`);
-//             return this.viking2.nom;
-//         } else {
-//             console.log(`${this.viking2.nom} est vaincu.`);
-//             return this.viking1.nom;
-//         }
-//     }
-// }
+        if (this.character1.sante <= 0) {
+            console.log(`${this.character1.nom} est vaincu.`);
+            return this.character2.nom;
+        } else {
+            console.log(`${this.character2.nom} est vaincu.`);
+            return this.character1.nom;
+        }
+    }
+}

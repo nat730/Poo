@@ -7,12 +7,13 @@ export class Character {
     private _job: CharacterType;
     private _niveau: number;
     private _experience: number;
-    private _sante: number = 40;
+    private _sante: number;
     private _santeMax: number;
     private _force: number;
     private _vitesse: number;
     private _intelligence: number;
     private _mana: number;
+    private _manaMax: number;
     private _chanceCoupCritique: number;
     private _defense: number;
     private _arme: Arme;
@@ -33,9 +34,10 @@ export class Character {
         this._force = 10 + this.job.forceBonus;
         this._vitesse = 10 +this.job.vitesseBonus;
         this._intelligence = 10 + this.job.intelligenceBonus;
-        this._mana = 50 + this.job.manaBonus;
+        this._manaMax = this.job.manaMaxBonus;
+        this._mana = 50 + this._manaMax;
         this._chanceCoupCritique = 2 + this.job.chanceCoupCritiqueBonus;
-        this._defense = 0
+        this._defense = 0;
         this._arme = arme;
         this._armure = armure;
     }
@@ -107,6 +109,14 @@ export class Character {
         this._mana = mana;
     }
 
+    get manaMax() {
+        return this._manaMax;
+    }
+
+    set manaMax(manaMax : number) {
+        this._manaMax = manaMax;
+    }
+
     get chanceCoupCritique() {
         return this._chanceCoupCritique;
     }
@@ -137,6 +147,14 @@ export class Character {
 
     set armure(armure : Armor) {
         this._armure = armure;
+    }
+
+    get santemax() {
+        return this._santeMax;
+    }
+
+    set santemax(santemax : number) {
+        this._santeMax = santemax;
     }
 }
    

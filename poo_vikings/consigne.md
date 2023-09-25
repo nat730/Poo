@@ -81,9 +81,7 @@ Si le personnage a perdu plus de 15% de ses points de vie totaux au tour préced
 
 La capacité spéciale des voleurs et des voleuses est l'attaque surprise : lors d'un coup critique, les dégats infligés sont de 250% de la force du personnage. En plus, ces personnages peuvent réattaquer lors d'un coup critique.
 
-À tous les tours les personnages de type magicien récupère la moitié de leurs intelligence en points de mana. Les sorts se lancent automatiquement dans certaines conditions. Les magiciens et les magiciennes connaissent 1 sort à la création du personnage.
-
-À la création d'un personnage magicien, il recoit un nom, +5 points de vie supplémentaires, +1 de force, +1 de vitesse, +5 d'intelligence, 45 points de mana et +0% de chance de coup critique.
+À la création d'un personnage voleur, il recoit un nom, +15 points de vie supplémentaires, +2 de force, +5 de vitesse, +1 d'intelligence, 10 points de mana et +13% de chance de coup critique.
 
 ### Choix du type de personnage
 

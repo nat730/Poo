@@ -4,7 +4,7 @@ export class CharacterType {
     private _forceBonus: number;
     private _vitesseBonus: number;
     private _intelligenceBonus: number;
-    private _manaBonus: number;
+    private _manaMaxBonus: number;
     private _chanceCoupCritiqueBonus: number;
 
     constructor(
@@ -13,7 +13,7 @@ export class CharacterType {
         forceBonus: number,
         vitesseBonus: number,
         intelligenceBonus: number,
-        manaBonus: number,
+        manaMaxBonus: number,
         chanceCoupCritiqueBonus: number
         ) {
         this._job = job;
@@ -21,7 +21,7 @@ export class CharacterType {
         this._forceBonus = forceBonus;
         this._vitesseBonus = vitesseBonus;
         this._intelligenceBonus = intelligenceBonus;
-        this._manaBonus = manaBonus;
+        this._manaMaxBonus = manaMaxBonus;
         this._chanceCoupCritiqueBonus = chanceCoupCritiqueBonus;
        
     }
@@ -66,12 +66,12 @@ export class CharacterType {
         return this._intelligenceBonus;
     }
 
-    set manaBonus(mana: number) {
-        this._manaBonus = mana;
+    set manaMaxBonus(manaMax: number) {
+        this._manaMaxBonus = manaMax;
     }
 
-    get manaBonus() {
-        return this._manaBonus;
+    get manaMaxBonus() {
+        return this._manaMaxBonus;
     }
 
     set chanceCoupCritiqueBonus(chanceCoupCritique: number) {
