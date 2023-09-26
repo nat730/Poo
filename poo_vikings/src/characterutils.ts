@@ -1,11 +1,10 @@
-export type JobAsString = 'Viking' | 'Archer' | 'Chevalier' | 'Magicien';
 import { Archer } from './archer';
 import { Chevalier } from './chevalier';
-import { Magicien } from './magicien';
+import { Wizard } from './magicien';
 import { Viking } from './viking';
+import { Voleur } from './voleur';
 
 import { CharacterType } from './CharacterType';
-import { Voleur } from './voleur';
 
 export function getJobFromString(job: string): CharacterType | null {
    if(!job) {
@@ -21,7 +20,7 @@ export function getJobFromString(job: string): CharacterType | null {
         return new Chevalier();
     }
     else if(job === 'Magicien') {
-        return new Magicien();
+        return new Wizard();
     }
     else if(job === 'Voleur'){
         return new Voleur()

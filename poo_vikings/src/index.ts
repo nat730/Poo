@@ -1,8 +1,7 @@
-import { Character } from './Personnage';
+import { Character } from './Character';
 import { Armurerie } from './armurerie';
 import * as readline from 'readline';
-import { getJobFromString } from './characterutils';
-import { FormatJobInput } from './characterutils';
+import { getJobFromString, FormatJobInput } from './characterutils';
 import { Battle } from './battle';
 
 const rl = readline.createInterface({
@@ -10,39 +9,44 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-let Héros: Character;
-let character2: Character;
+let hero: Character;
+let enemy: Character;
 
-function genererCarac(): Promise<void> {
-    return new Promise((resolve) => {
-        rl.question("Quel type de personnage voulez-vous créer ? (viking, archer, chevalier, magicien,Voleur) : ", (type: string) => {
-            const formatted = FormatJobInput(type)
-            const job = getJobFromString(formatted);
+function createCharacters(): Promise<void> {
+    return new Promise((resolve, reject) => {
+        rl.question("Quel type de personnage voulez-vous créer ? (viking, archer, chevalier, magicien, voleur) : ", (type: string) => {
+            const formattedType = FormatJobInput(type);
+            const job = getJobFromString(formattedType);
+            
             if (job) {
-                Héros = new Character("Héros", job, Armurerie.choisirArmeAleatoire(), Armurerie.choisirArmureAleatoire());
-                character2 = new Character("Ennemi", job, Armurerie.choisirArmeAleatoire(), Armurerie.choisirArmureAleatoire());
-                const arme1 = Armurerie.choisirArmeAleatoire();
-                const armure1 = Armurerie.choisirArmureAleatoire();
-                const arme2 = Armurerie.choisirArmeAleatoire();
-                const armure2 = Armurerie.choisirArmureAleatoire();
-                Héros.arme = arme1;
-                Héros.armure = armure1;
-                character2.arme = arme2
-                character2.armure = armure2;
+                hero = new Character("Héros", job, Armurerie.choisirArmeAleatoire(), Armurerie.choisirArmureAleatoire());
+                enemy = new Character("Ennemi", job, Armurerie.choisirArmeAleatoire(), Armurerie.choisirArmureAleatoire());
+                const heroWeapon = Armurerie.choisirArmeAleatoire();
+                const heroArmor = Armurerie.choisirArmureAleatoire();
+                const enemyWeapon = Armurerie.choisirArmeAleatoire();
+                const enemyArmor = Armurerie.choisirArmureAleatoire();
+                hero.arme = heroWeapon;
+                hero.armure = heroArmor;
+                enemy.arme = enemyWeapon;
+                enemy.armure = enemyArmor;
                 rl.close();
                 resolve();
             } else {
                 console.log("Veuillez choisir un type de personnage valide.");
-                genererCarac();
+                reject("Type de personnage invalide");
             }
         });
     });
 }
 
-genererCarac().then(() => {
-    if (Héros && character2) {
-        const battle = new Battle(Héros, character2);
-        const gagnant = battle.simulateBattle();
-        console.log(`Le gagnant est : ${gagnant}`);
-    }
-});
+createCharacters()
+    .then(() => {
+        if (hero && enemy) {
+            const battle = new Battle(hero, enemy);
+            const winner = battle.simulateBattle();
+            console.log(`Le gagnant est : ${winner}`);
+        }
+    })
+    .catch((error) => {
+        console.error(`Une erreur s'est produite : ${error}`);
+    });
