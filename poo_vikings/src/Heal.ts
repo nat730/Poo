@@ -1,51 +1,23 @@
 import { Character } from './Character';
+import { Spell } from './Spell';
 
-export class Heal {
-    private _nom: string;
-    private _coutMana: number;
-    private _soins: number;
+export class Heal extends Spell{
+    private _attacker: Character;
+
 
     constructor(character: Character) {
-        this._nom = "Soins magiques";
-        this._coutMana = 20;
-        this._soins = character.intelligence * 0.75;
+        super("Soins magiques", 20, character,undefined,0.75 * character.intelligence);
+        this._attacker = character;
     }
 
-    get nom() {
-        return this._nom;
-    }
-
-    get coutMana() {
-        return this._coutMana;
-    }
-
-    get soins() {
-        return this._soins;
-    }
-
-
-    public castHealing(attacker: Character): void {
-        if (this.canCastHealing(attacker)) {
-            console.log(`${attacker.nom} casts a healing spell.`);
-            const manaCost = 0.20 * attacker.manaMax;
-            attacker.mana -= manaCost;
-            const healing = 0.75 * attacker.intelligence;
-            attacker.sante += healing;
-            if (attacker.sante > attacker.santeMax) {
-                attacker.sante = attacker.santeMax;
-            }
-            console.log(`${attacker.nom} regains ${healing} sante points.`);
-        }
-    }
-
-    
-    private canCastHealing(attacker: Character): boolean {
+    public canCast(): boolean {
         return (
-            !attacker.hasActed &&
-            attacker.mana >= 0.20 * attacker.manaMax &&
-            attacker.sante < 0.25 * attacker.santeMax 
-                );
+            this._attacker.job.type === "Magicien" &&
+            this._attacker.sante <= 0.25 * this._attacker.santeMax
+        );
     }
-
-
+    performSpellEffect(): void {
+        const heal = 0.75 * this._attacker.intelligence;
+        console.log(`${this._attacker.nom} lance le sort ${this.name} se soignant de ${heal} points de vie.`);
+    }
 }

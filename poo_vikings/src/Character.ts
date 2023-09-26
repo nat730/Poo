@@ -18,8 +18,8 @@ export class Character {
     private _defense: number;
     private _arme: Arme;
     private _armure: Armor;
-    private _hasActed : boolean = false;
-    private _latestDamage: number = 0;
+    latestDamage: number = 0;
+    hasActed: boolean = false;
 
     constructor(
         nom: string,
@@ -42,12 +42,6 @@ export class Character {
         this._defense = 0;
         this._arme = arme;
         this._armure = armure;
-        this._hasActed = false;
-
-    }
-
-    public getLatestDamage(): number {
-        return this._latestDamage;
     }
 
     get nom() {
@@ -161,12 +155,9 @@ export class Character {
         return this._santeMax;
     }
 
-    set santeMax(santemax : number) {
+    set santemax(santemax : number) {
         this._santeMax = santemax;
     }
 
-    set hasActed(hasActed : boolean) {
-        this._hasActed = hasActed;
-    }
 }
    

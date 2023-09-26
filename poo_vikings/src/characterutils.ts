@@ -3,8 +3,8 @@ import { Chevalier } from './chevalier';
 import { Wizard } from './magicien';
 import { Viking } from './viking';
 import { Voleur } from './voleur';
-
 import { CharacterType } from './CharacterType';
+import { SpellBook } from './SpellBook';
 
 export function getJobFromString(job: string): CharacterType | null {
    if(!job) {

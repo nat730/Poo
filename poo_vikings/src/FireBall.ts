@@ -1,45 +1,27 @@
 import { Character } from './Character';
-import { Battle } from './battle'; 
+import { Spell } from './Spell';
 
-export class FireBall {
-    private _name: string;
-    private _manaCost: number;
-    private _damage: number;
-    private _battle: Battle;
+export class FireBall extends Spell {
 
-    constructor(character: Character, battle: Battle) {
-        this._name = "Fireball";
-        this._manaCost = 0.35 * character.manaMax;
-        this._damage = 1.75 * character.intelligence;
-        this._battle = battle;
+    private _attacker: Character;
+
+    constructor(character: Character) {
+        super("Fireball", 35, character, 1.75 * character.intelligence);
+        this._attacker = character;
     }
 
-    get name() {
-        return this._name;
-    }
-
-    get manaCost() {
-        return this._manaCost;
-    }
-
-    get damage() {
-        return this._damage;
-    }
-
-    public castFireball(attacker: Character, defender: Character): void {
-        if (this.canCastFireball(attacker)) {
-            console.log(`${attacker.nom} casts a ${this._name}.`);
-            attacker.mana -= this._manaCost;
-            this._battle.applyDamage(attacker, defender, this._damage, false);
-            attacker.hasActed = true;
-        }
-    }
-
-    private canCastFireball(attacker: Character): boolean {
+    canCast(): boolean {
         return (
-            !attacker.hasActed &&
-            attacker.mana >= this._manaCost &&
-            attacker.sante > 0.25 * attacker.santeMax
+            this._attacker.job.type === "Magicien" &&
+            this._attacker.mana >= this.manaCost &&
+            this._attacker.sante > 0.25 * this._attacker.santeMax &&
+            this._attacker.latestDamage < 0.15 * this._attacker.santeMax
         );
+    }
+
+    performSpellEffect(): void {
+        const damage = 1.75 * this._attacker.intelligence;
+        this._attacker.mana -= this.manaCost;
+        console.log(`${this._attacker.nom} lance le sort ${this.name} infligeant ${damage} dégâts.`);
     }
 }

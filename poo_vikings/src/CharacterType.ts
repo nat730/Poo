@@ -6,6 +6,8 @@ export class CharacterType {
     private _intelligenceBonus: number;
     private _manaMaxBonus: number;
     private _chanceCoupCritiqueBonus: number;
+    private _lastTurnReport: number[] = [];
+
 
     constructor(
         job: string,
@@ -80,6 +82,13 @@ export class CharacterType {
 
     get chanceCoupCritiqueBonus() {
         return this._chanceCoupCritiqueBonus;
+    }
+
+    public get lastTurnReport(): number[] {
+        return this._lastTurnReport;
+    }
+    public set lastTurnReport(value: number[]) {
+        this._lastTurnReport = value;
     }
 
 }

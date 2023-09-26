@@ -1,6 +1,8 @@
 import { Character } from "./Character";
-import { Magicien } from "./magicien";
-import { spellBook } from "./spellBook";
+import { FireBall } from "./FireBall";
+import { Heal } from "./Heal";
+import { Protect } from "./Protect";
+import { Spell } from "./Spell";
 
 export class Battle {
     private character1: Character;
@@ -40,15 +42,17 @@ export class Battle {
         }
     }
 
-    export applyDamage(attacker: Character, defender: Character, damage: number, isCritical: boolean): void {
+    applyDamage(attacker: Character, defender: Character, damage: number, isCritical: boolean): void {
         if (damage > 0) {
             if (isCritical) {
                 console.log(`${attacker.nom} fait un coup critique !`);
             }
             console.log(`${attacker.nom} attaque ${defender.nom} et inflige ${damage} points de dégâts.`);
 
-            if (attacker.job.type === "Chevalier") {
+            if (defender.job.type === "Chevalier") {
                 damage = damage * 0.75;
+                console.log(`${defender.nom} est un chevalier, il recoit 25% de dégâts en moins.`);
+                
             }
 
             defender.sante -= damage;
@@ -83,15 +87,11 @@ export class Battle {
                 console.log(`${defender.nom} a toujours ${defender.sante} points de vie.`);
             }
         }
-
-        if (defender.job.type === "Magicien") {
-            (attacker as Magicien).latestDamage = damage;
-        }
     }
 
     private activateTrap(attacker: Character, defender: Character): void {
         if (attacker.job.type === "Archer" && attacker.vitesse >= defender.vitesse) {
-            this.trap(attacker,defender);
+            this.trap(attacker, defender);
         }
     }
 
@@ -100,6 +100,8 @@ export class Battle {
         let defender: Character;
         let voleurCanReplay = false;
         let degatsInfliges = 0;
+        let latestDamage = 0;
+        let isCritical = false;
     
         if (this.character1.vitesse < this.character2.vitesse) {
             attacker = this.character1;
@@ -108,31 +110,44 @@ export class Battle {
             attacker = this.character2;
             defender = this.character1;
         }
+        this.activateTrap(attacker, defender);
     
         while (this.character1.sante > 0 && this.character2.sante > 0) {
-            let hasActed = false;
             this.regenMana(attacker);
-            
-            //mage lance sort
-
-             else {
-                        console.log(`${attacker.nom} n'a pas assez de mana pour lancer une protection magique.`);
-                    }
-                }
-            } else {
-                const isCritical = Math.random() < attacker.chanceCoupCritique;
-                degatsInfliges = this.calculateDamage(attacker, defender, isCritical);
-                this.applyDamage(attacker, defender, degatsInfliges, isCritical);
     
-                if (attacker.job.type === "Voleur" && isCritical) {
-                    voleurCanReplay = true;
-                }
+            let spellToCast: Spell | null = null;
+    
+
+            if (attacker.job.type === "Magicien" && attacker.mana >= 0.55 * attacker.manaMax) {
+                spellToCast = new FireBall(attacker);
+            } else if (attacker.job.type === "Magicien" && attacker.sante <= 0.25 * attacker.santeMax) {
+                spellToCast = new Heal(attacker);
+            } else if (attacker.job.type === "Magicien" && latestDamage >= 0.15 * attacker.santeMax) {
+                spellToCast = new Protect(attacker);
             }
     
-            hasActed = false;
+            if (spellToCast) {
+                if (spellToCast.canCast()) {
+                    console.log(`${attacker.nom} casts ${spellToCast.name}.`);
+                    spellToCast.performSpellEffect();
+                    attacker.mana -= spellToCast.manaCost;
+                    attacker.hasActed = true;
+                } else {
+                    console.log(`${attacker.nom} ne peut pas lancer ${spellToCast.name}.`);
+                }
+            } else {
+                let isCritical: boolean = Math.random() < attacker.chanceCoupCritique;
+                degatsInfliges = this.calculateDamage(attacker, defender, isCritical);
+                this.applyDamage(attacker, defender, degatsInfliges, isCritical);
+            }
+    
+            if (attacker.job.type === "Voleur" && isCritical) {
+                voleurCanReplay = true;
+            }
     
             if (!voleurCanReplay) {
                 [attacker, defender] = [defender, attacker];
+                latestDamage = degatsInfliges;
             } else {
                 voleurCanReplay = false;
             }
@@ -146,5 +161,4 @@ export class Battle {
             return this.character1.nom;
         }
     }
-    
-}    
+}

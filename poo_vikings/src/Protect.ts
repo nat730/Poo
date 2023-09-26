@@ -1,45 +1,28 @@
 import { Character } from './Character';
+import { Spell } from './Spell';
 
-export class Protect {
-    private _name: string;
-    private _manaCost: number;
-    private _barrier: number;
-    private _character: Character;
+export class Protect extends Spell {
+    private _attacker: Character;
 
     constructor(character: Character) {
-        this._name = "Protection spell";
-        this._manaCost = 0.30 * character.manaMax;
-        this._barrier = this._manaCost;
-        this._character = character;
+        super("Protection spell", 0.30 * character.mana, character,undefined,0.30*character.mana);
+        this._attacker = character;
     }
 
-    get name() {
-        return this._name;
-    }
-
-    get manaCost() {
-        return this._manaCost;
-    }
-
-    get barrier() {
-        return this._barrier;
-    }
-
-    public castProtection(): void {
-        if (this.canCastProtection()) {
-            console.log(`${this._character.nom} casts a ${this._name}.`);
-            this._character.mana -= this._manaCost;
-            console.log(`${this._character.nom} creates a protective barrier with ${this._barrier} health points.`);
-        }
-    }
-
-    private canCastProtection(): boolean {
-        // Vous pouvez maintenant accéder à latestDamage via une méthode ou une propriété dans Character
-        const latestDamage = this._character.getLatestDamage(); 
+    canCast(): boolean {
         return (
-            !this._character.hasActed &&
-            latestDamage > 0.15 * this._character.santeMax &&
-            this._character.mana >= this._manaCost
+            this._attacker.job.type === "Magicien" &&
+            this._attacker.mana >= this.manaCost &&
+            this._attacker.sante > 0.25 * this._attacker.santeMax &&
+            this._attacker.latestDamage <= 0.15 * this._attacker.santeMax
         );
     }
+
+    performSpellEffect(): void {
+        const heal = 0.30 * this._attacker.manaMax;
+        this._attacker.mana -= this.manaCost;
+        console.log(`${this._attacker.nom} lance le sort ${this.name} le protégeant de ${heal} points de vie.`);
+    }
 }
+
+
