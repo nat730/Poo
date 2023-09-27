@@ -4,7 +4,6 @@ import { Wizard } from './magicien';
 import { Viking } from './viking';
 import { Voleur } from './voleur';
 import { CharacterType } from './CharacterType';
-import { SpellBook } from './SpellBook';
 
 export function getJobFromString(job: string): CharacterType | null {
    if(!job) {
@@ -31,9 +30,6 @@ export function getJobFromString(job: string): CharacterType | null {
 }
 
 export function FormatJobInput(job: string): string {
-    if (!job) {
-        return job;
-    }
-    const formatted = job.charAt(0).toUpperCase() + job.slice(1).toLowerCase();
-    return formatted;
+    const formatted = job.trim();  // Supprime les espaces au début et à la fin
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1).toLowerCase();
 }

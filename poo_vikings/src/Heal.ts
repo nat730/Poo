@@ -4,7 +4,6 @@ import { Spell } from './Spell';
 export class Heal extends Spell{
     private _attacker: Character;
 
-
     constructor(character: Character) {
         super("Soins magiques", 20, character,undefined,0.75 * character.intelligence);
         this._attacker = character;

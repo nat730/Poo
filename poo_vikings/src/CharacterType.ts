@@ -1,3 +1,5 @@
+import { SpellBook } from "./SpellBook";
+
 export class CharacterType {
     private _job: string;
     private _santeMaxBonus: number;
@@ -7,7 +9,7 @@ export class CharacterType {
     private _manaMaxBonus: number;
     private _chanceCoupCritiqueBonus: number;
     private _lastTurnReport: number[] = [];
-
+    protected _spellBook?: SpellBook
 
     constructor(
         job: string,
@@ -16,7 +18,8 @@ export class CharacterType {
         vitesseBonus: number,
         intelligenceBonus: number,
         manaMaxBonus: number,
-        chanceCoupCritiqueBonus: number
+        chanceCoupCritiqueBonus: number,
+        SpellBook?: SpellBook
         ) {
         this._job = job;
         this._santeMaxBonus = santemaxBonus;
@@ -25,7 +28,7 @@ export class CharacterType {
         this._intelligenceBonus = intelligenceBonus;
         this._manaMaxBonus = manaMaxBonus;
         this._chanceCoupCritiqueBonus = chanceCoupCritiqueBonus;
-       
+        this._spellBook = SpellBook;
     }
 
     set job(job: string) {
@@ -91,4 +94,11 @@ export class CharacterType {
         this._lastTurnReport = value;
     }
 
+    public get spellBook(): SpellBook | undefined {
+        return this._spellBook;
+    }
+
+    public set spellBook(value: SpellBook | undefined) {
+        this._spellBook = value;
+    }
 }
