@@ -1,6 +1,6 @@
 import { Arme } from "./arme";
 import { Armor } from "./armure";
-import {CharacterType} from "./CharacterType";  
+import { CharacterType } from "./CharacterType";
 
 export class Character {
     private _nom: string;
@@ -15,11 +15,15 @@ export class Character {
     private _mana: number;
     private _manaMax: number;
     private _chanceCoupCritique: number;
+    private _critDamage: number;
     private _defense: number;
     private _arme: Arme;
     private _armure: Armor;
-    latestDamage: number = 0;
-    hasActed: boolean = false;
+    private _takeDamage: number;
+    public latestDamage: number = 0;
+    public hasActed: boolean = false;
+    public isCrit: boolean = false;
+    public protection: number = 0;
 
     constructor(
         nom: string,
@@ -31,17 +35,35 @@ export class Character {
         this._job = job;
         this._niveau = 1;
         this._experience = 0;
-        this._santeMax = 50 + this.job.santeMaxBonus;
-        this._sante = this._santeMax
-        this._force = 10 + this.job.forceBonus;
-        this._vitesse = 10 +this.job.vitesseBonus;
-        this._intelligence = 10 + this.job.intelligenceBonus;
-        this._manaMax = this.job.manaMaxBonus;
+        this._santeMax = 50 + this._job.santeMaxBonus;
+        this._sante = this._santeMax;
+        this._force = 10 + this._job.forceBonus;
+        this._vitesse = 10 + this._job.vitesseBonus;
+        this._intelligence = 10 + this._job.intelligenceBonus;
+        this._manaMax = this._job.manaMaxBonus;
         this._mana = 50 + this._manaMax;
-        this._chanceCoupCritique = 2 + this.job.chanceCoupCritiqueBonus;
+        this._chanceCoupCritique = 2 + this._job.chanceCoupCritiqueBonus;
+        this._critDamage = 2;
         this._defense = 0;
         this._arme = arme;
         this._armure = armure;
+        this._takeDamage = 0;
+    }
+
+    public beforeBattle() {
+        this._job.triggerBeforeBattle(this, this);
+    }
+
+    public beforeAttack() {
+        this._job.triggerBeforeAttack(this);
+    }
+
+    public attack(target: Character) {
+        this._job.triggerAttack(this, target);
+    }
+
+    public onTurnEnd() {
+        this._job.triggerTurnEnd(this, this._takeDamage);
     }
 
     get nom() {
@@ -127,6 +149,14 @@ export class Character {
         this._chanceCoupCritique = chanceCoupCritique;
     }
 
+    get critDamage() {
+        return this._critDamage;
+    }
+
+    set critDamage(critDamage : number) {
+        this._critDamage = critDamage;
+    }
+
     get defense() {
         return this._defense;
     }
@@ -157,6 +187,14 @@ export class Character {
 
     set santemax(santemax : number) {
         this._santeMax = santemax;
+    }
+
+    get TakeDamage() {
+        return this._takeDamage;
+    }
+
+    set TakeDamage(TakeDamage : number) {
+        this._takeDamage = TakeDamage;
     }
 
 }

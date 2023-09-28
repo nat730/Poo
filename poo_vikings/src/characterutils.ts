@@ -1,8 +1,8 @@
-import { Archer } from './archer';
-import { Chevalier } from './chevalier';
-import { Wizard } from './magicien';
-import { Viking } from './viking';
-import { Voleur } from './voleur';
+import { Archer } from './jobs/archer';
+import { Chevalier } from './jobs/chevalier';
+import { Wizard } from './jobs/magicien';
+import { Viking } from './jobs/viking';
+import { Voleur } from './jobs/voleur';
 import { CharacterType } from './CharacterType';
 
 export function getJobFromString(job: string): CharacterType | null {

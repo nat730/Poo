@@ -1,4 +1,3 @@
-import { Viking } from './viking';
 export class Arme {
     private _nom: string;
     private _degats: number;

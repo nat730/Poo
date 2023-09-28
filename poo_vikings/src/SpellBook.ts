@@ -1,18 +1,28 @@
-import { Character } from './Character';
-import { Spell } from './Spell';
-import { FireBall } from './FireBall';
-import { Protect } from './Protect';
-import { Heal } from './Heal';
+import { Spell } from "./spells/Spell";
+import { FireBall } from "./spells/FireBall";
+import { Character } from "./Character";
+import { Heal } from "./spells/Heal";
+import { Protect } from "./spells/Protect";
+
 
 export class SpellBook {
     private spells: Spell[] = [];
 
-    constructor(character: Character) {
-        const availableSpells: (new (character: Character) => Spell)[] = [FireBall, Protect, Heal];
+    constructor() {
+        const availableSpells =  [new FireBall(), new Heal(), new Protect()];
         const randomIndex = Math.floor(Math.random() * availableSpells.length);
-        const selectedSpellConstructor = availableSpells[randomIndex];
-        this.spells.push(new selectedSpellConstructor(character));
+        this.spells.push(availableSpells[randomIndex]);
     }
+
+    public castableSpells(character : Character) : boolean[] {
+        let castableSpell : boolean[] =[]
+        this.spells.forEach((spell) => castableSpell.push(spell.canCast(character))        
+        );
+
+        return castableSpell;
+    }
+
+
 
     addSpell(spell: Spell): void {
         this.spells.push(spell);

@@ -1,6 +1,11 @@
+import { Character } from "./Character";
 import { SpellBook } from "./SpellBook";
 
-export class CharacterType {
+export abstract class CharacterType {
+    beforeBattle(character1: Character) {
+        throw new Error("Method not implemented.");
+    }
+
     private _job: string;
     private _santeMaxBonus: number;
     private _forceBonus: number;
@@ -30,6 +35,11 @@ export class CharacterType {
         this._chanceCoupCritiqueBonus = chanceCoupCritiqueBonus;
         this._spellBook = SpellBook;
     }
+
+    abstract triggerBeforeBattle(attacker : Character,defender : Character) : any;
+    abstract triggerBeforeAttack(character : Character) : any;
+    abstract triggerAttack(attacker: Character, defender: Character) : any ;
+    abstract triggerTurnEnd(character : Character, damage : number)  : any;
 
     set job(job: string) {
         this._job = job;
