@@ -4,6 +4,7 @@ import * as readline from 'readline';
 import { getJobFromString, FormatJobInput } from './CharacterUtils';
 import { Battle } from './Battle';
 import { Armor } from './Objets/Armor';
+import { SpellBook } from './SpellBook';
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -57,7 +58,8 @@ async function main() {
 
     console.log(hero.defense);
     console.log(enemy.defense);
-
+    console.log(hero.job.spellBook);
+    console.log(enemy.job.spellBook);
 
     const battle = new Battle(attacker, defender);
     attacker.beforeBattle();
@@ -66,6 +68,7 @@ async function main() {
     while (attacker.sante > 0 && defender.sante > 0) {
         battle.turn();
     }
+
     rl.close();
 }
 
