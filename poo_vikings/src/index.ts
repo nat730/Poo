@@ -43,11 +43,11 @@ async function createCharacters(): Promise<void> {
 async function main() {
     await createCharacters();
     if (hero.vitesse > enemy.vitesse) {
-        hero = attacker;
-        enemy = defender;
+        attacker = hero;
+        defender = hero;
     } else {
-        hero = defender;
-        enemy = attacker;
+        attacker = enemy;
+        defender = hero;
     }
 console.log(hero);
 

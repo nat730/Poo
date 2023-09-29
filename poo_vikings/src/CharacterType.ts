@@ -2,9 +2,6 @@ import { Character } from "./Character";
 import { SpellBook } from "./SpellBook";
 
 export abstract class CharacterType {
-    beforeBattle(character1: Character) {
-        throw new Error("Method not implemented.");
-    }
 
     private _job: string;
     private _santeMaxBonus: number;
