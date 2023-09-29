@@ -1,8 +1,8 @@
-import { Archer } from './jobs/archer';
-import { Chevalier } from './jobs/chevalier';
-import { Wizard } from './jobs/magicien';
-import { Viking } from './jobs/viking';
-import { Voleur } from './jobs/voleur';
+import { Bowman } from './jobs/Bowman';
+import { Knight } from './jobs/Knight';
+import { Wizard } from './jobs/Wizard';
+import { Viking } from './jobs/Viking';
+import { Thief } from './jobs/Thief';
 import { CharacterType } from './CharacterType';
 
 export function getJobFromString(job: string): CharacterType | null {
@@ -13,16 +13,16 @@ export function getJobFromString(job: string): CharacterType | null {
          return new Viking();
     }
     else if(job === 'Archer') {
-        return new Archer();
+        return new Bowman();
     }
     else if(job === 'Chevalier') {
-        return new Chevalier();
+        return new Knight();
     }
     else if(job === 'Magicien') {
         return new Wizard();
     }
     else if(job === 'Voleur'){
-        return new Voleur()
+        return new Thief()
     }
     else {
         return null;

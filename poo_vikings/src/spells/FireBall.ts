@@ -12,8 +12,8 @@ export class FireBall extends Spell {
             target.protection -= damage;
             
             if (target.protection < 0) {
-                target.protection = 0;
                 target.sante -= Math.abs(target.protection);
+                target.protection = 0;
             }
         }
     }

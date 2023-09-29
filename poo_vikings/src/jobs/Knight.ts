@@ -1,7 +1,7 @@
 import { Character } from "../Character";
 import { CharacterType } from "../CharacterType";
 
-export class Chevalier extends CharacterType {
+export class Knight extends CharacterType {
 
     constructor() {
         super("Chevalier", 40, 5, 1, 1, 5, 3);
@@ -14,8 +14,8 @@ export class Chevalier extends CharacterType {
     }
     triggerAttack(attacker: Character, defender: Character) {
     }
-    triggerTurnEnd(character: Character) {
-        character.latestDamage = this.damage
+    triggerTurnEnd(character: Character,damage: number) {
+        character.latestDamage = damage
     }
 
     

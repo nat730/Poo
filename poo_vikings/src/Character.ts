@@ -1,5 +1,6 @@
-import { Arme } from "./arme";
-import { Armor } from "./armure";
+import { Weapon } from "./Objets/Weapon";
+import { Armor } from "./Objets/Armor";
+import { Consommable } from "./Objets/Laboratory";
 import { CharacterType } from "./CharacterType";
 
 export class Character {
@@ -17,20 +18,17 @@ export class Character {
     private _chanceCoupCritique: number;
     private _critDamage: number;
     private _defense: number;
-    private _arme: Arme;
+    private _arme: Weapon;
     private _armure: Armor;
     private _takeDamage: number;
     public latestDamage: number = 0;
     public hasActed: boolean = false;
     public isCrit: boolean = false;
     public protection: number = 0;
+    public Potion: Consommable;
+    public NbrPotion: number = 0;
 
-    constructor(
-        nom: string,
-        job: CharacterType,
-        arme: Arme,
-        armure: Armor
-    ) {
+    constructor(nom: string, job: CharacterType, arme: Weapon, armure: Armor) {
         this._nom = nom;
         this._job = job;
         this._niveau = 1;
@@ -48,6 +46,7 @@ export class Character {
         this._arme = arme;
         this._armure = armure;
         this._takeDamage = 0;
+        this.Potion = Consommable.choisirPotionAleatoire();
     }
 
     public beforeBattle() {
@@ -64,6 +63,44 @@ export class Character {
 
     public onTurnEnd() {
         this._job.triggerTurnEnd(this, this._takeDamage);
+        
+        if (this.canUseHealPotion(this)) {
+            this.healPotion(this);
+        }
+    
+        if (this.canUseManaPotion(this)) {
+            this.manaPotion(this);
+        }
+    }
+    
+
+    canUseHealPotion(character: Character): boolean {
+        if (this.Potion.category === "soin") {
+            return character.santeMax - character.sante > parseInt(this.Potion.effectPower);
+        }
+        return false;
+    }
+
+    healPotion(character: Character): void {
+        if (this.canUseHealPotion(character)) {
+            const healAmount = parseInt(this.Potion.effectPower);
+            character.sante += healAmount;
+            console.log(`${character.nom} a utilisé une potion de soin et a récupéré ${healAmount} points de vie.`);
+            this.NbrPotion--;
+        }
+    }
+
+    canUseManaPotion(character: Character): boolean {
+        return character.manaMax - character.mana > parseInt(this.Potion.effectPower);
+    }
+
+    manaPotion(character: Character): void {
+        if (this.canUseManaPotion(character)) {
+            const manaAmount = parseInt(this.Potion.effectPower);
+            character.mana += manaAmount;
+            console.log(`${character.nom} a utilisé une potion de mana et a récupéré ${manaAmount} points de mana.`);
+            this.NbrPotion--;
+        }
     }
 
     get nom() {
@@ -169,7 +206,7 @@ export class Character {
         return this._arme;
     }
 
-    set arme(arme : Arme) {
+    set arme(arme : Weapon) {
         this._arme = arme;
     }
 

@@ -1,7 +1,7 @@
 import { Character } from "../Character";
 import { CharacterType } from "../CharacterType";
 
-export class Archer extends CharacterType {
+export class Bowman extends CharacterType {
     trapPut = false;
     trapDamage = 0;
 

@@ -5,8 +5,6 @@ import { Spell } from '../spells/Spell';
 
 export class Wizard extends CharacterType {
 
-
-    // private selectedSpell: Spell | null = null;
     private _latestDamage: number = 0;
     private _availableSpells: boolean[] | undefined;
 
@@ -26,7 +24,6 @@ export class Wizard extends CharacterType {
     }
 
     triggerBeforeBattle(character: Character) {
-        throw new Error("Method not implemented.");
     }
 
     triggerBeforeAttack(character: Character) {

@@ -1,10 +1,8 @@
 import { Character } from './Character';
-import { SpellBook } from './SpellBook';
-import { Armurerie } from './armurerie';
+import { Armurerie } from './Objets/Armory';
 import * as readline from 'readline';
-import { getJobFromString, FormatJobInput } from './characterutils';
-import { Battle } from './battle';
-import { Wizard } from './jobs/magicien';
+import { getJobFromString, FormatJobInput } from './CharacterUtils';
+import { Battle } from './Battle';
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -13,9 +11,11 @@ const rl = readline.createInterface({
 
 let hero: Character;
 let enemy: Character;
+let attacker: Character;
+let defender: Character;
 
 
-function createCharacters(): Promise<void> {
+async function createCharacters(): Promise<void> {
     return new Promise((resolve, reject) => {
         rl.question("Quel type de personnage voulez-vous créer ? (viking, archer, chevalier, magicien, voleur) : ", (type: string) => {
             const formattedType = FormatJobInput(type);
@@ -40,4 +40,21 @@ function createCharacters(): Promise<void> {
     });
 }
 
-createCharacters()
+async function main() {
+    await createCharacters();
+    if (hero.vitesse > enemy.vitesse) {
+        hero = attacker;
+        enemy = defender;
+    } else {
+        hero = defender;
+        enemy = attacker;
+    }
+console.log(hero);
+
+    const battle = new Battle(hero, enemy);
+    while (hero.sante > 0 && enemy.sante > 0) {
+        battle.turn();
+    }
+}
+
+main();
