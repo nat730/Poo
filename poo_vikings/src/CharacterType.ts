@@ -36,7 +36,7 @@ export abstract class CharacterType {
     abstract triggerBeforeBattle(attacker : Character,defender : Character) : any;
     abstract triggerBeforeAttack(character : Character) : any;
     abstract triggerAttack(attacker: Character, defender: Character) : any ;
-    abstract triggerTurnEnd(character : Character, damage : number)  : any;
+    abstract triggerTurnEnd(attacker : Character, defender : number)  : any;
 
     set job(job: string) {
         this._job = job;

@@ -2,6 +2,8 @@ import { Weapon } from "./Objets/Weapon";
 import { Armor } from "./Objets/Armor";
 import { Consommable } from "./Objets/Laboratory";
 import { CharacterType } from "./CharacterType";
+import { Thief } from "./jobs/Thief";
+import { Viking } from "./jobs/Viking";
 
 export class Character {
     private _nom: string;
@@ -19,7 +21,7 @@ export class Character {
     private _critDamage: number;
     private _defense: number;
     private _arme: Weapon;
-    private _armure: Armor;
+    private _armure: Armor[] = [];
     private _takeDamage: number;
     public latestDamage: number = 0;
     public hasActed: boolean = false;
@@ -27,8 +29,9 @@ export class Character {
     public protection: number = 0;
     public Potion: Consommable;
     public NbrPotion: number = 0;
+    isCritical: boolean = false;
 
-    constructor(nom: string, job: CharacterType, arme: Weapon, armure: Armor) {
+    constructor(nom: string, job: CharacterType, arme: Weapon, armure: Armor[]) {
         this._nom = nom;
         this._job = job;
         this._niveau = 1;
@@ -54,8 +57,14 @@ export class Character {
     }
 
     public beforeAttack() {
+        this.isCritical = this.calculateCriticalHit(this._chanceCoupCritique);
         this._job.triggerBeforeAttack(this);
     }
+    
+    private calculateCriticalHit(chanceCoupCritique: number): boolean {
+        return Math.random() * 100 < chanceCoupCritique;
+    }
+    
 
     public attack(target: Character) {
         this._job.triggerAttack(this, target);
@@ -63,6 +72,13 @@ export class Character {
 
     public onTurnEnd() {
         this._job.triggerTurnEnd(this, this._takeDamage);
+        if (this.isCritical && this._job instanceof Thief) {
+                this.hasActed = false;
+            }
+
+        if (this._job instanceof Viking) {
+            
+        }
         
         if (this.canUseHealPotion(this)) {
             this.healPotion(this);
@@ -210,13 +226,10 @@ export class Character {
         this._arme = arme;
     }
 
-    get armure() {
-        return this._armure;
-    }
-
     set armure(armure : Armor) {
-        this._armure = armure;
+        this._armure.push(armure);
     }
+    
 
     get santeMax() {
         return this._santeMax;

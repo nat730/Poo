@@ -10,25 +10,25 @@ export class Battle {
     }
 
     public turn() {
-        this.attacker.beforeBattle();
+        this.attacker.hasActed = false;
         this.attacker.beforeAttack();
-        const damage = this.calculateDamage(this.attacker, this.defender, false);
-        this.applyDamage(this.attacker, this.defender, damage, false);
+        const isCritical = this.attacker.isCritical;
+        const damage = this.calculateDamage(this.attacker, this.defender);
+        this.applyDamage(this.attacker, this.defender, damage, isCritical);
+        this.attacker.attack(this.defender);
         this.attacker.onTurnEnd();
         if (this.attacker.hasActed) {
+            [this.attacker, this.defender] = [this.defender, this.attacker];
             this.attacker.hasActed = false;
-
-            let temp : Character = this.attacker;
-            this.attacker = this.defender;
-            this.defender = temp;
         }
     }
-
-    private calculateDamage(attacker: Character, defender: Character, isCritical: boolean): number {
+    
+    private calculateDamage(attacker: Character, defender: Character): number {
         const baseDamage = attacker.force + attacker.arme.degats - defender.defense;
-        const damageMultiplier = isCritical ? attacker.critDamage : 1;
+        const damageMultiplier = attacker.isCritical ? attacker.critDamage : 1;
         return baseDamage * damageMultiplier;
     }
+    
 
     private applyDamage(attacker: Character, defender: Character, damage: number, isCritical: boolean): void {
         if (damage > 0) {
@@ -38,6 +38,7 @@ export class Battle {
             console.log(`${attacker.nom} attaque ${defender.nom} et inflige ${damage} points de dégâts.`);
 
             defender.sante -= damage;
+            attacker.hasActed = true;
 
             if (defender.sante < 0) {
                 defender.sante = 0;

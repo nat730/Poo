@@ -7,6 +7,8 @@ export class Armurerie implements Item {
     static _price: number;
     static _weight: number;
     static _category: string;
+    static armureParCategorie: { [category: string]: Armor[] } = {};
+
 
     constructor(name: string, price: number, weight: number, category: string) {
         Armurerie._name = name;
@@ -70,15 +72,34 @@ export class Armurerie implements Item {
         new Armor("Bottes en diamant", 5, 20, 25, "pieds"),
     ];
 
+    static initArmureParCategorie(): void {
+        Armurerie.armure.forEach(armure => {
+            if (!Armurerie.armureParCategorie[armure.category]) {
+                Armurerie.armureParCategorie[armure.category] = [];
+            }
+            Armurerie.armureParCategorie[armure.category].push(armure);
+        });
+    }
 
     static choisirArmeAleatoire(): Weapon {
         const indexAleatoire = Math.floor(Math.random() * Armurerie.armes.length);
         return Armurerie.armes[indexAleatoire];
     }
 
-    static choisirArmureAleatoire(): Armor {
-        const indexAleatoire = Math.floor(Math.random() * Armurerie.armure.length);
-        return Armurerie.armure[indexAleatoire];
+    static choisirArmureAleatoire(): Armor[] {
+        if (Object.keys(Armurerie.armureParCategorie).length === 0) {
+            Armurerie.initArmureParCategorie();
+        }
+
+        const armuresAleatoires: Armor[] = [];
+
+        for (const category in Armurerie.armureParCategorie) {
+            const armuresDeLaCategorie = Armurerie.armureParCategorie[category];
+            const indexAleatoire = Math.floor(Math.random() * armuresDeLaCategorie.length);
+            armuresAleatoires.push(armuresDeLaCategorie[indexAleatoire]);
+        }
+
+        return armuresAleatoires;
     }
 
     get name(): string {

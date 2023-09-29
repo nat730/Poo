@@ -15,7 +15,6 @@ export class Knight extends CharacterType {
     triggerAttack(attacker: Character, defender: Character) {
     }
     triggerTurnEnd(character: Character,damage: number) {
-        character.latestDamage = damage
     }
 
     
