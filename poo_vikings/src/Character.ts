@@ -67,6 +67,7 @@ export class Character {
     
 
     public attack(target: Character) {
+        console.log('damages before hit', this._takeDamage);
         this._job.triggerAttack(this, target);
     }
 

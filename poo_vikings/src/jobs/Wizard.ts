@@ -8,7 +8,6 @@ export class Wizard extends CharacterType {
     private _latestDamage: number = 0;
     private _availableSpells: boolean[] | undefined;
 
-
     constructor() {
         super("Magicien", 5, 1, 1, 5, 45, 3);
         this._spellBook = new SpellBook();
@@ -17,8 +16,9 @@ export class Wizard extends CharacterType {
 
     castRandom(castable : boolean[]) : number{
         let index = Math.floor(Math.random() * castable.length)
-        while (!castable[index])
+        while (!castable[index]){
             index = Math.floor(Math.random() * castable.length)
+        }
             
         return index
     }
@@ -33,6 +33,8 @@ export class Wizard extends CharacterType {
 
     triggerAttack(caster: Character, target: Character): void {
         if (this._availableSpells) {
+            console.log(`${caster.nom} lance un sort !`);
+            
             let index: number = this.castRandom(this._availableSpells);
             let spell: Spell = this._spellBook?.getSpells()[index]!;
             spell.cast(caster, target);

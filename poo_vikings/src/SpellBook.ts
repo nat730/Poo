@@ -4,14 +4,16 @@ import { Character } from "./Character";
 import { Heal } from "./spells/Heal";
 import { Protect } from "./spells/Protect";
 
+const AVAILABLE_SPELLS =  [new FireBall(), new Heal(), new Protect()];
 
 export class SpellBook {
     private spells: Spell[] = [];
 
     constructor() {
-        const availableSpells =  [new FireBall(), new Heal(), new Protect()];
-        const randomIndex = Math.floor(Math.random() * availableSpells.length);
-        this.spells.push(availableSpells[randomIndex]);
+        const randomIndex = Math.floor(Math.random() * AVAILABLE_SPELLS.length);
+        console.log('spell index', randomIndex);
+        
+        this.spells.push(AVAILABLE_SPELLS[randomIndex]);
     }
 
     public castableSpells(character : Character) : boolean[] {

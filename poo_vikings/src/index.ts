@@ -31,8 +31,8 @@ async function createCharacters(): Promise<void> {
                 hero = new Character("Héros", job, weaponHero, armorHero);
                 enemy = new Character("Ennemi", job, weaponEnemy, armorEnemy);
 
-                hero.defense = (armorHero[0]?.defense) + (armorHero[1]?.defense) + (armorHero[2]?.defense) + (armorHero[3]?.defense);
-                enemy.defense = (armorEnemy[0]?.defense) + (armorEnemy[1]?.defense) + (armorEnemy[2]?.defense) + (armorEnemy[3]?.defense);
+                // hero.defense = (armorHero[0]?.defense) + (armorHero[1]?.defense) + (armorHero[2]?.defense) + (armorHero[3]?.defense);
+                // enemy.defense = (armorEnemy[0]?.defense) + (armorEnemy[1]?.defense) + (armorEnemy[2]?.defense) + (armorEnemy[3]?.defense);
 
                 resolve();
             } else {
